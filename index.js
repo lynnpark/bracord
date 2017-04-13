@@ -3,6 +3,17 @@ var app = express();
 var router = express.Router();
 var path = __dirname + '/views/';
 
+var mongo = require('mongodb').MongoClient;
+
+mongo.connect('mongodb://localhost:27017/bradb', function (err, db) {
+	if (err) throw err;
+
+	db.collection('bras').find().toArray(function (err, result) {
+		if (err) throw err;
+		console.log(result);
+	});
+});
+
 router.use(function(req, res, next){
 	console.log("/" + req.method);
 	next();
