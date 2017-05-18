@@ -4,6 +4,7 @@ var router = express.Router();
 var path = __dirname + '/views/';
 
 var mongo = require('mongodb').MongoClient;
+var braData;
 
 mongo.connect('mongodb://localhost:27017/bradb', function (err, db) {
 	if (err) throw err;
@@ -11,6 +12,7 @@ mongo.connect('mongodb://localhost:27017/bradb', function (err, db) {
 	db.collection('bras').find().toArray(function (err, result) {
 		if (err) throw err;
 		console.log(result);
+		braData = result;
 	});
 });
 
@@ -23,7 +25,13 @@ router.get("/", function(req,res){
 	res.sendFile(path + "index.html");
 });
 
+router.post("/", function(req, res){
+	res.send(braData);
+});
+
 app.use("/", router);
+
+app.use(express.static('scripts'));
 
 //app.use(bodyParser.json());
 
